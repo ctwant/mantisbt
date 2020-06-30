@@ -634,6 +634,40 @@ event_signal( 'EVENT_UPDATE_BUG_FORM', array( $t_bug_id ) );
 echo '<tr class="spacer"><td colspan="6"></td></tr>';
 echo '<tr class="hidden"></tr>';
 
+# Custom Fields
+$t_custom_fields_found = false;
+$t_related_custom_field_ids = custom_field_get_linked_ids( $t_bug->project_id );
+
+foreach ( $t_related_custom_field_ids as $t_id ) {
+    $t_def = custom_field_get_definition( $t_id );
+    if( ( $t_def['display_update'] || $t_def['require_update'] ) && custom_field_has_write_access( $t_id, $t_bug_id ) ) {
+        $t_custom_fields_found = true;
+
+        $t_required_class = $t_def['require_update'] ? ' class="required" ' : '';
+
+        if( $t_def['type'] != CUSTOM_FIELD_TYPE_RADIO && $t_def['type'] != CUSTOM_FIELD_TYPE_CHECKBOX ) {
+            $t_label_for = ' for="custom_field_' . string_attribute( $t_def['id'] ) . '" ';
+        } else {
+            $t_label_for = '';
+        }
+
+        echo '<tr>';
+        echo '<td class="category">';
+        echo '<label', $t_required_class, $t_label_for, '>';
+        echo '<span>', string_display_line( lang_get_defaulted( $t_def['name'] ) ), '</span>';
+        echo '</label>';
+        echo '</td><td colspan="5">';
+        print_custom_field_input( $t_def, $t_bug_id, $t_def['require_update'] );
+        echo '</td></tr>';
+    }
+} # foreach( $t_related_custom_field_ids as $t_id )
+
+if( $t_custom_fields_found ) {
+    # spacer
+    echo '<tr class="spacer"><td colspan="6"></td></tr>';
+    echo '<tr class="hidden"></tr>';
+}
+
 # Summary
 if( $t_show_summary ) {
 	echo '<tr>';
@@ -687,39 +721,7 @@ if( $t_show_additional_information ) {
 echo '<tr class="spacer"><td colspan="6"></td></tr>';
 echo '<tr class="hidden"></tr>';
 
-# Custom Fields
-$t_custom_fields_found = false;
-$t_related_custom_field_ids = custom_field_get_linked_ids( $t_bug->project_id );
 
-foreach ( $t_related_custom_field_ids as $t_id ) {
-	$t_def = custom_field_get_definition( $t_id );
-	if( ( $t_def['display_update'] || $t_def['require_update'] ) && custom_field_has_write_access( $t_id, $t_bug_id ) ) {
-		$t_custom_fields_found = true;
-
-		$t_required_class = $t_def['require_update'] ? ' class="required" ' : '';
-
-		if( $t_def['type'] != CUSTOM_FIELD_TYPE_RADIO && $t_def['type'] != CUSTOM_FIELD_TYPE_CHECKBOX ) {
-			$t_label_for = ' for="custom_field_' . string_attribute( $t_def['id'] ) . '" ';
-		} else {
-			$t_label_for = '';
-		}
-
-		echo '<tr>';
-		echo '<td class="category">';
-		echo '<label', $t_required_class, $t_label_for, '>';
-		echo '<span>', string_display_line( lang_get_defaulted( $t_def['name'] ) ), '</span>';
-		echo '</label>';
-		echo '</td><td colspan="5">';
-		print_custom_field_input( $t_def, $t_bug_id, $t_def['require_update'] );
-		echo '</td></tr>';
-	}
-} # foreach( $t_related_custom_field_ids as $t_id )
-
-if( $t_custom_fields_found ) {
-	# spacer
-	echo '<tr class="spacer"><td colspan="6"></td></tr>';
-	echo '<tr class="hidden"></tr>';
-}
 
 # Bugnote Text Box
 $t_default_bugnote_view_status = config_get( 'default_bugnote_view_status' );
