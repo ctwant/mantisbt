@@ -524,6 +524,19 @@ if( ( $t_flags['versions_target_version_show'] && isset( $t_issue['target_versio
 	echo '</tr>';
 }
 
+# Custom Fields
+if( isset( $t_issue['custom_fields'] ) ) {
+    foreach( $t_issue['custom_fields'] as $t_custom_field ) {
+        $t_def = custom_field_get_definition( $t_custom_field['field']['id'] );
+
+        echo '<tr>';
+        echo '<th class="bug-custom-field category">', string_display_line( lang_get_defaulted( $t_def['name'] ) ), '</th>';
+        echo '<td class="bug-custom-field" colspan="5">';
+        print_custom_field_value( $t_def, $t_custom_field['field']['id'], $f_issue_id );
+        echo '</td></tr>';
+    }
+}
+
 #
 # Bug Details Event Signal
 #
@@ -592,22 +605,7 @@ if( $t_flags['tags_can_attach'] ) {
 echo '<tr class="spacer"><td colspan="6"></td></tr>';
 echo '<tr class="hidden"></tr>';
 
-# Custom Fields
-if( isset( $t_issue['custom_fields'] ) ) {
-	foreach( $t_issue['custom_fields'] as $t_custom_field ) {
-		$t_def = custom_field_get_definition( $t_custom_field['field']['id'] );
 
-		echo '<tr>';
-		echo '<th class="bug-custom-field category">', string_display_line( lang_get_defaulted( $t_def['name'] ) ), '</th>';
-		echo '<td class="bug-custom-field" colspan="5">';
-		print_custom_field_value( $t_def, $t_custom_field['field']['id'], $f_issue_id );
-		echo '</td></tr>';
-	}
-
-	# spacer
-	echo '<tr class="spacer"><td colspan="6"></td></tr>';
-	echo '<tr class="hidden"></tr>';
-}
 
 echo '</tbody></table>';
 echo '</div></div></div></div></div>';
@@ -628,7 +626,7 @@ if( $t_flags['monitor_show'] ) {
 	echo '<div class="col-md-12 col-xs-12">';
 	echo '<a id="monitors"></a>';
 	echo '<div class="space-10"></div>';
-	
+
 	$t_collapse_block = is_collapsed( 'monitoring' );
 	$t_block_css = $t_collapse_block ? 'collapsed' : '';
 	$t_block_icon = $t_collapse_block ? 'fa-chevron-down' : 'fa-chevron-up';
@@ -645,10 +643,10 @@ if( $t_flags['monitor_show'] ) {
 				</a>
 			</div>
 		</div>
-	
+
 		<div class="widget-body">
 			<div class="widget-main no-padding">
-	
+
 				<div class="table-responsive">
 					<table class="table table-bordered table-condensed table-striped">
 	<tr>
@@ -674,7 +672,7 @@ if( $t_flags['monitor_show'] ) {
 					}
 				 }
 			}
-	
+
 			if( $t_flags['monitor_can_add'] ) {
 	?>
 			<br /><br />
@@ -694,7 +692,7 @@ if( $t_flags['monitor_show'] ) {
 	</div>
 	</div>
 	</div>
-	
+
 	<?php
 }
 
@@ -733,7 +731,7 @@ if( $t_flags['history_show'] && $f_history ) {
 	<div class="col-md-12 col-xs-12">
 		<a id="history"></a>
 		<div class="space-10"></div>
-	
+
 	<?php
 		$t_collapse_block = is_collapsed( 'history' );
 		$t_block_css = $t_collapse_block ? 'collapsed' : '';
@@ -772,7 +770,7 @@ if( $t_flags['history_show'] && $f_history ) {
 				</th>
 			</tr>
 		</thead>
-	
+
 		<tbody>
 	<?php
 		foreach( $t_history as $t_item ) {
@@ -801,7 +799,7 @@ if( $t_flags['history_show'] && $f_history ) {
 	</div>
 	</div>
 	</div>
-	
+
 	<?php
 }
 
