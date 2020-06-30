@@ -287,21 +287,6 @@ if( $t_show_attachments ) {
 	</tr>
 <?php } ?>
 
-    <!-- 優先權 -->
-    <?php if ($t_show_priority) {
-        ?>
-        <tr>
-            <th class="category">
-                <label for="priority"><?php print_documentation_link('priority') ?></label>
-            </th>
-            <td>
-                <select <?php echo helper_get_tab_index() ?> id="priority" name="priority" class="input-sm">
-                    <?php print_enum_string_option_list('priority', $f_priority) ?>
-                </select>
-            </td>
-        </tr>
-    <?php } ?>
-
     <!-- 嚴重性 -->
     <?php if ($t_show_severity) { ?>
         <tr>
@@ -325,6 +310,21 @@ if( $t_show_attachments ) {
             <td>
                 <select <?php echo helper_get_tab_index() ?> id="reproducibility" name="reproducibility" class="input-sm">
                     <?php print_enum_string_option_list('reproducibility', $f_reproducibility) ?>
+                </select>
+            </td>
+        </tr>
+    <?php } ?>
+
+    <!-- 優先權 -->
+    <?php if ($t_show_priority) {
+        ?>
+        <tr>
+            <th class="category">
+                <label for="priority"><?php print_documentation_link('priority') ?></label>
+            </th>
+            <td>
+                <select <?php echo helper_get_tab_index() ?> id="priority" name="priority" class="input-sm">
+                    <?php print_enum_string_option_list('priority', $f_priority) ?>
                 </select>
             </td>
         </tr>
