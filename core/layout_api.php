@@ -365,9 +365,9 @@ function layout_login_page_begin() {
 	# Advertise the availability of the browser search plug-ins.
 	echo "\t", '<link rel="search" type="application/opensearchdescription+xml" title="MantisBT: Text Search" href="' . string_sanitize_url( 'browser_search_plugin.php?type=text', true) . '" />' . "\n";
 	echo "\t", '<link rel="search" type="application/opensearchdescription+xml" title="MantisBT: Issue Id" href="' . string_sanitize_url( 'browser_search_plugin.php?type=id', true) . '" />' . "\n";
-	
+
 	html_head_javascript();
-	
+
 	event_signal( 'EVENT_LAYOUT_RESOURCES' );
 	html_head_end();
 
@@ -1130,107 +1130,107 @@ function layout_footer() {
 		user_update_last_visit( $t_user_id );
 	}
 
-	layout_footer_begin();
-
-	# Show MantisBT version and copyright statement
-	$t_version_suffix = '';
-	$t_copyright_years = ' 2000 - ' . date( 'Y' );
-	if( config_get( 'show_version' ) == ON ) {
-		$t_version_suffix = ' ' . htmlentities( MANTIS_VERSION . config_get_global( 'version_suffix' ) );
-	}
-	echo '<div class="col-md-6 col-xs-12 no-padding">' . "\n";
-	echo '<address>' . "\n";
-	echo '<strong>Powered by <a href="https://www.mantisbt.org" title="bug tracking software">MantisBT ' . $t_version_suffix . '</a></strong> <br>' . "\n";
-	echo "<small>Copyright &copy;$t_copyright_years MantisBT Team</small>" . '<br>';
-
-	# Show optional user-specified custom copyright statement
-	$t_copyright_statement = config_get( 'copyright_statement' );
-	if( $t_copyright_statement ) {
-		echo '<small>' . $t_copyright_statement . '</small>' . "\n";
-	}
-
-	# Show contact information
-	if( !is_page_name( 'login_page' ) ) {
-		$t_webmaster_contact_information = sprintf( lang_get( 'webmaster_contact_information' ), string_html_specialchars( config_get( 'webmaster_email' ) ) );
-		echo '<small>' . $t_webmaster_contact_information . '</small>' . '<br>' . "\n";
-	}
-
-	echo '</address>' . "\n";
-	echo '</div>' . "\n";
-
-
-	# We don't have a button anymore, so for now we will only show the resized
-	# version of the logo when not on login page.
-	if( !is_page_name( 'login_page' ) ) {
-		echo '<div class="col-md-6 col-xs-12">' . "\n";
-		echo '<div class="pull-right" id="powered-by-mantisbt-logo">' . "\n";
-		$t_mantisbt_logo_url = helper_mantis_url( 'images/mantis_logo.png' );
-		echo '<a href="https://www.mantisbt.org" '.
-			'title="Mantis Bug Tracker: a free and open source web based bug tracking system.">' .
-			'<img src="' . $t_mantisbt_logo_url . '" width="102" height="35" ' .
-			'alt="Powered by Mantis Bug Tracker: a free and open source web based bug tracking system." />' .
-			'</a>' . "\n";
-		echo '</div>' . "\n";
-		echo '</div>' . "\n";
-	}
-
-	event_signal( 'EVENT_LAYOUT_PAGE_FOOTER' );
-
-	$t_show_timer = config_get_global( 'show_timer' );
-	$t_show_memory_usage = config_get_global( 'show_memory_usage' );
-	$t_show_queries_count = config_get_global( 'show_queries_count' );
-	$t_display_debug_info = $t_show_timer || $t_show_memory_usage || $t_show_queries_count;
-
-	if( $t_display_debug_info ) {
-		echo '<div class="col-xs-12 no-padding grey">' . "\n";
-		echo '<address class="no-margin pull-right">' . "\n";
-	}
-
-	# Print the page execution time
-	if( $t_show_timer ) {
-		$t_page_execution_time = sprintf( lang_get( 'page_execution_time' ), number_format( microtime( true ) - $g_request_time, 4 ) );
-		echo '<small><i class="fa fa-clock-o"></i> ' . $t_page_execution_time . '</small>&#160;&#160;&#160;&#160;' . "\n";
-	}
-
-	# Print the page memory usage
-	if( $t_show_memory_usage ) {
-		$t_page_memory_usage = sprintf( lang_get( 'memory_usage_in_kb' ), number_format( memory_get_peak_usage() / 1024 ) );
-		echo '<small><i class="fa fa-bolt"></i> ' . $t_page_memory_usage . '</small>&#160;&#160;&#160;&#160;' . "\n";
-	}
-
-	# Determine number of unique queries executed
-	if( $t_show_queries_count ) {
-		$t_total_queries_count = count( $g_queries_array );
-		$t_unique_queries_count = 0;
-		$t_total_query_execution_time = 0;
-		$t_unique_queries = array();
-		for ( $i = 0; $i < $t_total_queries_count; $i++ ) {
-			if( !in_array( $g_queries_array[$i][0], $t_unique_queries ) ) {
-				$t_unique_queries_count++;
-				$g_queries_array[$i][3] = false;
-				array_push( $t_unique_queries, $g_queries_array[$i][0] );
-			} else {
-				$g_queries_array[$i][3] = true;
-			}
-			$t_total_query_execution_time += $g_queries_array[$i][1];
-		}
-
-		$t_total_queries_executed = sprintf( lang_get( 'total_queries_executed' ), $t_total_queries_count );
-		echo '<small><i class="fa fa-database"></i> ' . $t_total_queries_executed . '</small>&#160;&#160;&#160;&#160;' . "\n";
-		if( config_get_global( 'db_log_queries' ) ) {
-			$t_unique_queries_executed = sprintf( lang_get( 'unique_queries_executed' ), $t_unique_queries_count );
-			echo '<small><i class="fa fa-database"></i> ' . $t_unique_queries_executed . '</small>&#160;&#160;&#160;&#160;' . "\n";
-		}
-		$t_total_query_time = sprintf( lang_get( 'total_query_execution_time' ), $t_total_query_execution_time );
-		echo '<small><i class="fa fa-clock-o"></i> ' . $t_total_query_time . '</small>&#160;&#160;&#160;&#160;' . "\n";
-	}
-
-	if( $t_display_debug_info ) {
-		echo '</address>' . "\n";
-		echo '</div>' . "\n";
-	}
-
-	layout_footer_end();
+//	layout_footer_begin();
+//
+//	# Show MantisBT version and copyright statement
+//	$t_version_suffix = '';
+//	$t_copyright_years = ' 2000 - ' . date( 'Y' );
+//	if( config_get( 'show_version' ) == ON ) {
+//		$t_version_suffix = ' ' . htmlentities( MANTIS_VERSION . config_get_global( 'version_suffix' ) );
+//	}
+//	echo '<div class="col-md-6 col-xs-12 no-padding">' . "\n";
+//	echo '<address>' . "\n";
+//	echo '<strong>Powered by <a href="https://www.mantisbt.org" title="bug tracking software">MantisBT ' . $t_version_suffix . '</a></strong> <br>' . "\n";
+//	echo "<small>Copyright &copy;$t_copyright_years MantisBT Team</small>" . '<br>';
+//
+//	# Show optional user-specified custom copyright statement
+//	$t_copyright_statement = config_get( 'copyright_statement' );
+//	if( $t_copyright_statement ) {
+//		echo '<small>' . $t_copyright_statement . '</small>' . "\n";
+//	}
+//
+//	# Show contact information
+//	if( !is_page_name( 'login_page' ) ) {
+//		$t_webmaster_contact_information = sprintf( lang_get( 'webmaster_contact_information' ), string_html_specialchars( config_get( 'webmaster_email' ) ) );
+//		echo '<small>' . $t_webmaster_contact_information . '</small>' . '<br>' . "\n";
+//	}
+//
+//	echo '</address>' . "\n";
+//	echo '</div>' . "\n";
+//
+//
+//	# We don't have a button anymore, so for now we will only show the resized
+//	# version of the logo when not on login page.
+//	if( !is_page_name( 'login_page' ) ) {
+//		echo '<div class="col-md-6 col-xs-12">' . "\n";
+//		echo '<div class="pull-right" id="powered-by-mantisbt-logo">' . "\n";
+//		$t_mantisbt_logo_url = helper_mantis_url( 'images/mantis_logo.png' );
+//		echo '<a href="https://www.mantisbt.org" '.
+//			'title="Mantis Bug Tracker: a free and open source web based bug tracking system.">' .
+//			'<img src="' . $t_mantisbt_logo_url . '" width="102" height="35" ' .
+//			'alt="Powered by Mantis Bug Tracker: a free and open source web based bug tracking system." />' .
+//			'</a>' . "\n";
+//		echo '</div>' . "\n";
+//		echo '</div>' . "\n";
+//	}
+//
+//	event_signal( 'EVENT_LAYOUT_PAGE_FOOTER' );
+//
+//	$t_show_timer = config_get_global( 'show_timer' );
+//	$t_show_memory_usage = config_get_global( 'show_memory_usage' );
+//	$t_show_queries_count = config_get_global( 'show_queries_count' );
+//	$t_display_debug_info = $t_show_timer || $t_show_memory_usage || $t_show_queries_count;
+//
+//	if( $t_display_debug_info ) {
+//		echo '<div class="col-xs-12 no-padding grey">' . "\n";
+//		echo '<address class="no-margin pull-right">' . "\n";
+//	}
+//
+//	# Print the page execution time
+//	if( $t_show_timer ) {
+//		$t_page_execution_time = sprintf( lang_get( 'page_execution_time' ), number_format( microtime( true ) - $g_request_time, 4 ) );
+//		echo '<small><i class="fa fa-clock-o"></i> ' . $t_page_execution_time . '</small>&#160;&#160;&#160;&#160;' . "\n";
+//	}
+//
+//	# Print the page memory usage
+//	if( $t_show_memory_usage ) {
+//		$t_page_memory_usage = sprintf( lang_get( 'memory_usage_in_kb' ), number_format( memory_get_peak_usage() / 1024 ) );
+//		echo '<small><i class="fa fa-bolt"></i> ' . $t_page_memory_usage . '</small>&#160;&#160;&#160;&#160;' . "\n";
+//	}
+//
+//	# Determine number of unique queries executed
+//	if( $t_show_queries_count ) {
+//		$t_total_queries_count = count( $g_queries_array );
+//		$t_unique_queries_count = 0;
+//		$t_total_query_execution_time = 0;
+//		$t_unique_queries = array();
+//		for ( $i = 0; $i < $t_total_queries_count; $i++ ) {
+//			if( !in_array( $g_queries_array[$i][0], $t_unique_queries ) ) {
+//				$t_unique_queries_count++;
+//				$g_queries_array[$i][3] = false;
+//				array_push( $t_unique_queries, $g_queries_array[$i][0] );
+//			} else {
+//				$g_queries_array[$i][3] = true;
+//			}
+//			$t_total_query_execution_time += $g_queries_array[$i][1];
+//		}
+//
+//		$t_total_queries_executed = sprintf( lang_get( 'total_queries_executed' ), $t_total_queries_count );
+//		echo '<small><i class="fa fa-database"></i> ' . $t_total_queries_executed . '</small>&#160;&#160;&#160;&#160;' . "\n";
+//		if( config_get_global( 'db_log_queries' ) ) {
+//			$t_unique_queries_executed = sprintf( lang_get( 'unique_queries_executed' ), $t_unique_queries_count );
+//			echo '<small><i class="fa fa-database"></i> ' . $t_unique_queries_executed . '</small>&#160;&#160;&#160;&#160;' . "\n";
+//		}
+//		$t_total_query_time = sprintf( lang_get( 'total_query_execution_time' ), $t_total_query_execution_time );
+//		echo '<small><i class="fa fa-clock-o"></i> ' . $t_total_query_time . '</small>&#160;&#160;&#160;&#160;' . "\n";
+//	}
+//
+//	if( $t_display_debug_info ) {
+//		echo '</address>' . "\n";
+//		echo '</div>' . "\n";
+//	}
+//
+//	layout_footer_end();
 }
 
 /**
