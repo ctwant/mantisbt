@@ -285,27 +285,52 @@ if( $t_show_attachments ) {
 			</select>
 		</td>
 	</tr>
-<?php
-	}
+<?php } ?>
 
-	if( $t_show_reproducibility ) {
-?>
+    <!-- 優先權 -->
+    <?php if ($t_show_priority) {
+        ?>
+        <tr>
+            <th class="category">
+                <label for="priority"><?php print_documentation_link('priority') ?></label>
+            </th>
+            <td>
+                <select <?php echo helper_get_tab_index() ?> id="priority" name="priority" class="input-sm">
+                    <?php print_enum_string_option_list('priority', $f_priority) ?>
+                </select>
+            </td>
+        </tr>
+    <?php } ?>
 
-	<tr>
-		<th class="category">
-			<label for="reproducibility"><?php print_documentation_link( 'reproducibility' ) ?></label>
-		</th>
-		<td>
-			<select <?php echo helper_get_tab_index() ?> id="reproducibility" name="reproducibility" class="input-sm">
-				<?php print_enum_string_option_list( 'reproducibility', $f_reproducibility ) ?>
-			</select>
-		</td>
-	</tr>
-<?php
-	}
+    <!-- 嚴重性 -->
+    <?php if ($t_show_severity) { ?>
+        <tr>
+            <th class="category">
+                <label for="severity"><?php print_documentation_link('severity') ?></label>
+            </th>
+            <td>
+                <select <?php echo helper_get_tab_index() ?> id="severity" name="severity" class="input-sm">
+                    <?php print_enum_string_option_list('severity', $f_severity) ?>
+                </select>
+            </td>
+        </tr>
+    <?php } ?>
 
-	if( $t_show_eta ) {
-?>
+    <!-- 出現頻率 -->
+    <?php if ($t_show_reproducibility) { ?>
+        <tr>
+            <th class="category">
+                <label for="reproducibility"><?php print_documentation_link('reproducibility') ?></label>
+            </th>
+            <td>
+                <select <?php echo helper_get_tab_index() ?> id="reproducibility" name="reproducibility" class="input-sm">
+                    <?php print_enum_string_option_list('reproducibility', $f_reproducibility) ?>
+                </select>
+            </td>
+        </tr>
+    <?php } ?>
+
+	<?php if( $t_show_eta ) { ?>
 
 	<tr>
 		<th class="category">
@@ -317,40 +342,9 @@ if( $t_show_attachments ) {
 			</select>
 		</td>
 	</tr>
-<?php
-	}
+<?php } ?>
 
-	if( $t_show_severity ) {
-?>
-	<tr>
-		<th class="category">
-			<label for="severity"><?php print_documentation_link( 'severity' ) ?></label>
-		</th>
-		<td>
-			<select <?php echo helper_get_tab_index() ?> id="severity" name="severity" class="input-sm">
-				<?php print_enum_string_option_list( 'severity', $f_severity ) ?>
-			</select>
-		</td>
-	</tr>
-<?php
-	}
-
-	if( $t_show_priority ) {
-?>
-	<tr>
-		<th class="category">
-			<label for="priority"><?php print_documentation_link( 'priority' ) ?></label>
-		</th>
-		<td>
-			<select <?php echo helper_get_tab_index() ?> id="priority" name="priority" class="input-sm">
-				<?php print_enum_string_option_list( 'priority', $f_priority ) ?>
-			</select>
-		</td>
-	</tr>
-<?php
-	}
-
-	if( $t_show_due_date ) {
+    <?php if( $t_show_due_date ) {
 		$t_date_to_display = '';
 
 		if( !date_is_null( $f_due_date ) ) {
