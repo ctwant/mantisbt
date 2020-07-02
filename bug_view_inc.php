@@ -621,81 +621,6 @@ if( $t_flags['relationships_show'] ) {
 	bug_view_relationship_view_box( $f_issue_id, /* can_update */ $t_flags['relationships_can_update'] );
 }
 
-# User list monitoring the bug
-if( $t_flags['monitor_show'] ) {
-	echo '<div class="col-md-12 col-xs-12">';
-	echo '<a id="monitors"></a>';
-	echo '<div class="space-10"></div>';
-
-	$t_collapse_block = is_collapsed( 'monitoring' );
-	$t_block_css = $t_collapse_block ? 'collapsed' : '';
-	$t_block_icon = $t_collapse_block ? 'fa-chevron-down' : 'fa-chevron-up';
-	?>
-	<div id="monitoring" class="widget-box widget-color-blue2 <?php echo $t_block_css ?>">
-		<div class="widget-header widget-header-small">
-			<h4 class="widget-title lighter">
-				<i class="ace-icon fa fa-users"></i>
-				<?php echo lang_get( 'users_monitoring_bug' ) ?>
-			</h4>
-			<div class="widget-toolbar">
-				<a data-action="collapse" href="#">
-					<i class="1 ace-icon fa <?php echo $t_block_icon ?> bigger-125"></i>
-				</a>
-			</div>
-		</div>
-
-		<div class="widget-body">
-			<div class="widget-main no-padding">
-
-				<div class="table-responsive">
-					<table class="table table-bordered table-condensed table-striped">
-	<tr>
-		<th class="category" width="15%">
-			<?php echo lang_get( 'monitoring_user_list' ); ?>
-		</th>
-		<td>
-	<?php
-			if( !isset( $t_issue['monitors'] ) || count( $t_issue['monitors'] ) == 0 ) {
-				echo lang_get( 'no_users_monitoring_bug' );
-			} else {
-				$t_first_user = true;
-				foreach( $t_issue['monitors'] as $t_monitor_user ) {
-					if( $t_first_user ) {
-						$t_first_user = false;
-					} else {
-						echo ', ';
-					}
-
-					print_user( $t_monitor_user['id'] );
-					if( $t_flags['monitor_can_delete'] ) {
-						echo ' <a class="btn btn-xs btn-primary btn-white btn-round" href="' . helper_mantis_url( 'bug_monitor_delete.php' ) . '?bug_id=' . $f_issue_id . '&amp;user_id=' . $t_monitor_user['id'] . htmlspecialchars(form_security_param( 'bug_monitor_delete' )) . '"><i class="fa fa-times"></i></a>';
-					}
-				 }
-			}
-
-			if( $t_flags['monitor_can_add'] ) {
-	?>
-			<br /><br />
-			<form method="get" action="bug_monitor_add.php" class="form-inline noprint">
-			<?php echo form_security_field( 'bug_monitor_add' ) ?>
-				<input type="hidden" name="bug_id" value="<?php echo (integer)$f_issue_id; ?>" />
-				<label for="bug_monitor_list_username"><?php echo lang_get( 'username' ) ?></label>
-				<input type="text" class="input-sm" id="bug_monitor_list_username" name="username" />
-				<input type="submit" class="btn btn-primary btn-sm btn-white btn-round" value="<?php echo lang_get( 'add_user_to_monitor' ) ?>" />
-			</form>
-			<?php } ?>
-		</td>
-	</tr>
-	</table>
-	</div>
-	</div>
-	</div>
-	</div>
-	</div>
-
-	<?php
-}
-
 # Bugnotes and "Add Note" box
 if( 'ASC' == current_user_get_pref( 'bugnote_order' ) ) {
 	define( 'BUGNOTE_VIEW_INC_ALLOW', true );
@@ -723,6 +648,81 @@ if( config_get( 'time_tracking_enabled' ) &&
 	access_has_bug_level( config_get( 'time_tracking_view_threshold' ), $f_issue_id ) ) {
 	define( 'BUGNOTE_STATS_INC_ALLOW', true );
 	include( $t_mantis_dir . 'bugnote_stats_inc.php' );
+}
+
+# User list monitoring the bug
+if( $t_flags['monitor_show'] ) {
+    echo '<div class="col-md-12 col-xs-12">';
+    echo '<a id="monitors"></a>';
+    echo '<div class="space-10"></div>';
+
+    $t_collapse_block = is_collapsed( 'monitoring' );
+    $t_block_css = $t_collapse_block ? 'collapsed' : '';
+    $t_block_icon = $t_collapse_block ? 'fa-chevron-down' : 'fa-chevron-up';
+    ?>
+    <div id="monitoring" class="widget-box widget-color-blue2 <?php echo $t_block_css ?>">
+        <div class="widget-header widget-header-small">
+            <h4 class="widget-title lighter">
+                <i class="ace-icon fa fa-users"></i>
+                <?php echo lang_get( 'users_monitoring_bug' ) ?>
+            </h4>
+            <div class="widget-toolbar">
+                <a data-action="collapse" href="#">
+                    <i class="1 ace-icon fa <?php echo $t_block_icon ?> bigger-125"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main no-padding">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-condensed table-striped">
+                        <tr>
+                            <th class="category" width="15%">
+                                <?php echo lang_get( 'monitoring_user_list' ); ?>
+                            </th>
+                            <td>
+                                <?php
+                                if( !isset( $t_issue['monitors'] ) || count( $t_issue['monitors'] ) == 0 ) {
+                                    echo lang_get( 'no_users_monitoring_bug' );
+                                } else {
+                                    $t_first_user = true;
+                                    foreach( $t_issue['monitors'] as $t_monitor_user ) {
+                                        if( $t_first_user ) {
+                                            $t_first_user = false;
+                                        } else {
+                                            echo ', ';
+                                        }
+
+                                        print_user( $t_monitor_user['id'] );
+                                        if( $t_flags['monitor_can_delete'] ) {
+                                            echo ' <a class="btn btn-xs btn-primary btn-white btn-round" href="' . helper_mantis_url( 'bug_monitor_delete.php' ) . '?bug_id=' . $f_issue_id . '&amp;user_id=' . $t_monitor_user['id'] . htmlspecialchars(form_security_param( 'bug_monitor_delete' )) . '"><i class="fa fa-times"></i></a>';
+                                        }
+                                    }
+                                }
+
+                                if( $t_flags['monitor_can_add'] ) {
+                                    ?>
+                                    <br /><br />
+                                    <form method="get" action="bug_monitor_add.php" class="form-inline noprint">
+                                        <?php echo form_security_field( 'bug_monitor_add' ) ?>
+                                        <input type="hidden" name="bug_id" value="<?php echo (integer)$f_issue_id; ?>" />
+                                        <label for="bug_monitor_list_username"><?php echo lang_get( 'username' ) ?></label>
+                                        <input type="text" class="input-sm" id="bug_monitor_list_username" name="username" />
+                                        <input type="submit" class="btn btn-primary btn-sm btn-white btn-round" value="<?php echo lang_get( 'add_user_to_monitor' ) ?>" />
+                                    </form>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <?php
 }
 
 # History
