@@ -1392,7 +1392,7 @@ function print_column_status( BugData $p_bug, $p_columns_target = COLUMNS_TARGET
 	$t_status_css = html_get_status_css_fg( $p_bug->status, $t_current_user, $p_bug->project_id );
 	echo '<td class="column-status">';
 	echo '<div class="align-left">';
-	echo '<i class="fa fa-square fa-status-box ' . $t_status_css . '"></i> ';
+	echo '<i class="fa fa-circle fa-status-box ' . $t_status_css . '"></i> ';
 	printf( '<span title="%s">%s</span>',
 		get_enum_element( 'resolution', $p_bug->resolution, $t_current_user, $p_bug->project_id ),
 		get_enum_element( 'status', $p_bug->status, $t_current_user, $p_bug->project_id )

@@ -424,7 +424,7 @@ if( $t_show_status || $t_show_resolution ) {
 		$t_status_css = html_get_status_css_fg( $t_bug->status );
 
 		echo '<td class="bug-status">';
-		echo '<i class="fa fa-square fa-status-box ' . $t_status_css . '"></i> ';
+		echo '<i class="fa fa-circle fa-status-box ' . $t_status_css . '"></i> ';
 		print_status_option_list( 'status', $t_bug->status,
 			access_can_close_bug( $t_bug ),
 			$t_bug->project_id );

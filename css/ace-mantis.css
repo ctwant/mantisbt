@@ -207,9 +207,10 @@ pre {
 }
 
 .fa-status-box {
-    font-size: 1.8em;
+    font-size: 18px;
     line-height: 0.73em;
     vertical-align: -25%;
+    margin: 0 5px 0 5px;
 }
 
 .skin-3 .navbar .navbar-toggle {
@@ -228,7 +229,7 @@ pre {
 }
 
 .ace-nav .nav-avatar-container-40 {
-    width: 48px; 
+    width: 48px;
     height: 40px;
     float: left;
 }
@@ -239,7 +240,7 @@ pre {
     border: 2px solid #FFF;
     max-width: 40px;
     max-height: 40px;
-    border-radius: 4px !important;    
+    border-radius: 4px !important;
 }
 .profile-activity-avatar-40 {
     border-radius: 15% !important;
@@ -247,7 +248,7 @@ pre {
 }
 
 .profile-activity-avatar-container-40 {
-    width: 48px; 
+    width: 48px;
     line-height: 40px;
     float: left;
     text-align: center;
